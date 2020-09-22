@@ -1,5 +1,9 @@
 ### AndroidPlot dans l'aosp
 
+based on the wonderful work (thanks +++) of:
+https://github.com/halfhp
+https://github.com/halfhp/androidplot.git
+https://github.com/halfhp/fig.git
 
 ### Importation du projet dans un Hello World des development/samples de l'AOSP
 cd root; 
