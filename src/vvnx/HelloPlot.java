@@ -12,6 +12,9 @@ import android.app.Activity;
 import android.graphics.*;
 import android.os.Bundle;
 
+import android.widget.Button;
+import android.widget.TextView;
+
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYSeries;
@@ -22,9 +25,7 @@ import java.text.Format;
 import java.text.ParsePosition;
 import java.util.*;
 
-/**
- * A simple XYPlot
- */
+
 public class HelloPlot extends Activity {
 
     private XYPlot plot;
@@ -33,7 +34,7 @@ public class HelloPlot extends Activity {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.simple_xy_plot_example);
+        setContentView(R.layout.main_layout);
 
         // initialize our XYPlot reference:
         plot = (XYPlot) findViewById(R.id.plot);
