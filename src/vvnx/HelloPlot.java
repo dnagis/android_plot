@@ -26,6 +26,8 @@ import java.text.ParsePosition;
 import java.util.*;
 
 
+
+
 public class HelloPlot extends Activity {
 
     private XYPlot plot;
@@ -41,15 +43,25 @@ public class HelloPlot extends Activity {
 
         // create a couple arrays of y-values to plot:
         final Number[] domainLabels = {1, 2, 3, 6, 7, 8, 9, 10, 13, 14};
-        Number[] series1Numbers = {1, 4, 2, 8, 4, 16, 8, 32, 16, 64};
-        Number[] series2Numbers = {5, 2, 10, 5, 20, 10, 40, 20, 80, 40};
+        
+        
+        //Format de la déclaration des data series du helloPlot Quickstart, sous forme d'arrays, qui ensuite sont transformées en listes dans new SimpleXYSeries()
+        //Number[] series1Numbers = {1, 4, 2, 8, 4, 16, 8, 32, 16, 64};
+        
+        //Déclarations sous forme de List<Integer> que je peux renvoyer depuis une méthode dans ma classe BaseDeDonnees
+        List<Integer> series1Numbers_as_list = Arrays.asList(new Integer[]{1, 4, 2, 8, 4, 16, 8, 32, 16, 64});
+        List<Integer> series2Numbers_as_list = Arrays.asList(new Integer[]{5, 2, 10, 5, 20, 10, 40, 20, 70, 40});
+ 
 
         // turn the above arrays into XYSeries':
         // (Y_VALS_ONLY means use the element index as the x value)
-        XYSeries series1 = new SimpleXYSeries(
-                Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");
-        XYSeries series2 = new SimpleXYSeries(
-                Arrays.asList(series2Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series2");
+        /*XYSeries series1 = new SimpleXYSeries(Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");*/
+        //Je passe directement les series en List<Integer>
+        XYSeries series1 = new SimpleXYSeries(series1Numbers_as_list, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");
+        XYSeries series2 = new SimpleXYSeries(series2Numbers_as_list, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series2");         
+                
+                
+                
 
         // create formatters to use for drawing a series using LineAndPointRenderer
         // and configure them from xml:
