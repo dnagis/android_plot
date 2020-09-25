@@ -32,3 +32,10 @@ je crois qu'il n'y a que 4 ou 5 fichiers à modifier
 	
 #erreurs du type "cannot find symbol" Fig.configure....
 	git clone https://github.com/halfhp/fig.git + symlink halfhp dans src/com/ --> import com.halfhp.fig.Fig; doit marcher
+
+
+### Full Doc 
+https://github.com/halfhp/androidplot/blob/master/docs/index.md
+
+### Time
+https://github.com/halfhp/androidplot/blob/master/demoapp/src/main/java/com/androidplot/demos/TimeSeriesActivity.java
