@@ -25,6 +25,7 @@ import java.text.Format;
 import java.text.ParsePosition;
 import java.util.*;
 
+import java.text.SimpleDateFormat;
 import android.util.Log;
 
 
@@ -48,7 +49,7 @@ public class HelloPlot extends Activity {
         // create a couple arrays of y-values to plot:
         //final Number[] domainLabels = {10, 20, 30, 40};
         
-        plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 2);
+        //plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 2);
         
         //Format de la déclaration des data series du helloPlot Quickstart, sous forme d'arrays, qui ensuite sont transformées en listes dans new SimpleXYSeries()
         //Number[] series1Numbers = {1, 4, 2, 8, 4, 16, 8, 32, 16, 64};
@@ -68,7 +69,8 @@ public class HelloPlot extends Activity {
         
         
         //Passer deux arrays: un pour les X un pour les Y
-        List<Integer> xVals = Arrays.asList(new Integer[]{1, 2, 7, 8});
+        List<Integer> xVals = Arrays.asList(new Integer[]{1601280124, 1601280224, 1601280324, 1601280424});
+        //List<Integer> xVals = Arrays.asList(new Integer[]{1, 2, 7, 8});
         List<Integer> yVals = Arrays.asList(new Integer[]{5, 2, 10, 5});
             
         
@@ -133,10 +135,21 @@ public class HelloPlot extends Activity {
         protected void drawLabel(Canvas canvas, String text, Paint paint,
                 float x, float y, boolean isOrigin) {
                 Log.d(TAG, "On passe dans drawLabel avec text = " + text);
+                
+                
+                //pour une valeur 1601280124 text arrive sous la forme: 1601280124,0. Impossible d'avoir un long directement. Il faut "." et pas "," et
+                //il faut passer par parseDouble puis caster en long
+                long epoch = (long)Double.parseDouble(text.replaceAll(",",".")); 
+				Date date = new Date( epoch * 1000);
+				SimpleDateFormat jdf = new SimpleDateFormat("HH:mm:ss");                
+                text = jdf.format(date);                
+                Log.d(TAG, "date après conversion = " + text);
+                
+                
                 //Exemple AndroidPlot: on colore en rouge
-                final Paint newPaint = new Paint(paint);
-                newPaint.setColor(Color.RED);
-                super.drawLabel(canvas, text, newPaint, x, y , isOrigin);
+                //final Paint newPaint = new Paint(paint);
+                //newPaint.setColor(Color.RED);
+                super.drawLabel(canvas, text, paint, x, y , isOrigin);
         }
     }
 }
