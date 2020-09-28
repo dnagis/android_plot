@@ -45,110 +45,55 @@ public class HelloPlot extends Activity {
 
         // initialize our XYPlot reference:
         plot = (XYPlot) findViewById(R.id.plot);
-
-        // create a couple arrays of y-values to plot:
-        //final Number[] domainLabels = {10, 20, 30, 40};
-        
-        //plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 2);
-        
-        //Format de la déclaration des data series du helloPlot Quickstart, sous forme d'arrays, qui ensuite sont transformées en listes dans new SimpleXYSeries()
-        //Number[] series1Numbers = {1, 4, 2, 8, 4, 16, 8, 32, 16, 64};
-        
-        //Déclarations sous forme de List<Integer> que je peux renvoyer depuis une méthode dans ma classe BaseDeDonnees
-        //List<Integer> series1Numbers_as_list = Arrays.asList(new Integer[]{1, 4, 2, 8, 4, 16, 8, 32, 16, 64});
-        //List<Integer> series2Numbers_as_list = Arrays.asList(new Integer[]{5, 2, 10, 5, 20, 10, 40, 20, 70, 40});
- 
-
-        // turn the above arrays into XYSeries':
-        
-        /*XYSeries series1 = new SimpleXYSeries(Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");*/
-        //Je passe directement les series en List<Integer>
-        //XYSeries series1 = new SimpleXYSeries(series1Numbers_as_list, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");
-        //XYSeries series2 = new SimpleXYSeries(series2Numbers_as_list, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series2");         
-                
-        
-        
-        //Passer deux arrays: un pour les X un pour les Y
-        List<Integer> xVals = Arrays.asList(new Integer[]{1601280124, 1601280224, 1601280324, 1601280424});
-        //List<Integer> xVals = Arrays.asList(new Integer[]{1, 2, 7, 8});
-        List<Integer> yVals = Arrays.asList(new Integer[]{5, 2, 10, 5});
+  
+        //La data en List<Integer>
+        //soit deux List       
+        //List<Integer> xVals = Arrays.asList(new Integer[]{1601280124, 1601280224, 1601280524, 1601280624});
+        //List<Integer> yVals = Arrays.asList(new Integer[]{5, 2, 10, 5});
+        //soit une list interleaved
+        List<Integer> myVals = Arrays.asList(new Integer[]{1601280124, 2, 1601280224, 3, 1601280524, 4, 1601280624, 5});
             
         
-        //XYSeries my_series = new SimpleXYSeries(yVals, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "my series1"); // (Y_VALS_ONLY means use the element index as the x value)
-        XYSeries my_series = new SimpleXYSeries(xVals, yVals, "my series");     
-             
+        //Transformation de la data en XYseries https://github.com/halfhp/androidplot/blob/master/docs/xyplot.md#simplexyseries
+        //XYSeries my_series = new SimpleXYSeries(yVals, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "my series"); // (Y_VALS_ONLY means use the element index as the x value)
+		XYSeries my_series = new SimpleXYSeries(myVals, SimpleXYSeries.ArrayFormat.XY_VALS_INTERLEAVED, "my series"); //XY_VALS_INTERLEAVED: interleaved list of x/y value pairs (x[0] = 1, y[0] = 4, x[1] = 2, y[1] = 8, ...):
+		//XYSeries my_series = new SimpleXYSeries(xVals, yVals, "my series");     
+          
+        
+        //setDomainStep -> Le nombre de ticks en abcisse (en jargon AndroidPlot: le nombre de lines en domain)  
+        //https://github.com/halfhp/androidplot/blob/master/docs/xyplot.md#domain--range-lines  
+        //plot.setDomainStep(StepMode.INCREMENT_BY_VAL, 2); et non pas INCREMENT_BY_VALUE comme écrit dans la doc
+        plot.setDomainStep(StepMode.SUBDIVIDE, 4); //the graph is subdivided into the specified number of sections.
                 
-                
 
-        // create formatters to use for drawing a series using LineAndPointRenderer
-        // and configure them from xml:
-        LineAndPointFormatter series1Format =
-                new LineAndPointFormatter(this, R.xml.line_point_formatter_with_labels);
-
-        /*LineAndPointFormatter series2Format =
-                new LineAndPointFormatter(this, R.xml.line_point_formatter_with_labels_2);*/
-
-        // add an "dash" effect to the series2 line:
-        /*series2Format.getLinePaint().setPathEffect(new DashPathEffect(new float[] {
-
-                // always use DP when specifying pixel sizes, to keep things consistent across devices:
-                PixelUtils.dpToPix(20),
-                PixelUtils.dpToPix(15)}, 0));*/
-
-        // just for fun, add some smoothing to the lines:
-        // see: http://androidplot.com/smooth-curves-and-androidplot/
-        //series1Format.setInterpolationParams(
-        //        new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));
-
-        /*series2Format.setInterpolationParams(
-                new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));*/
+        //formatters configuration en xml (androidplot/demoapp/src/main/res/xml/)
+        
+        //LineAndPointFormatter series1Format = new LineAndPointFormatter(this, R.xml.line_point_formatter_with_labels); //line_point_formatter_with_labels.xml: celui du hello world, une ligne qui relie les points
+        LineAndPointFormatter series1Format = new LineAndPointFormatter(this, R.xml.point_formatter); //scatterPlot (que les points)
 
         // add a new series' to the xyplot:
         plot.addSeries(my_series, series1Format);
-        //plot.addSeries(series2, series2Format);
+       
         
-        
+        //https://github.com/halfhp/androidplot/blob/master/docs/xyplot.md#linelabelrenderer
         //https://github.com/halfhp/androidplot/blob/master/demoapp/src/main/java/com/androidplot/demos/FXPlotExampleActivity.java
         plot.getGraph().setLineLabelRenderer(XYGraphWidget.Edge.BOTTOM, new MyLineLabelRenderer());
-        
-        
-        
-		//Ce système de modification des labels ne marche que quand je déclare new SimpleXYSeries(yVals, SimpleXYSeries.ArrayFormat.Y_VALS_ONLY... ce qui ne 
-		//	me donne pas de "linéarité" dans les valeurs d'abcisse (chaque valeur de x n'est pas comptabilisée sur sa valeur mais juste sur son existence (un item, pas un temps par exemple)
-        /*plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
-            @Override
-            // obj contains the raw Number value representing the position of the label being drawn. customize the labeling however you want here:
-            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                Log.d(TAG, "getLineLabelStyle override de format(), Number=" + ((Number) obj).floatValue());
-                int i = Math.round(((Number) obj).floatValue());
-                return toAppendTo.append(xVals.toArray()[i]);
-            }
-            @Override
-            public Object parseObject(String source, ParsePosition pos) {
-                return null;
-            }
-        });*/
+  
     }
     
         class MyLineLabelRenderer extends XYGraphWidget.LineLabelRenderer {
         @Override
-        protected void drawLabel(Canvas canvas, String text, Paint paint,
-                float x, float y, boolean isOrigin) {
-                Log.d(TAG, "On passe dans drawLabel avec text = " + text);
-                
-                
+        protected void drawLabel(Canvas canvas, String text, Paint paint, float x, float y, boolean isOrigin) {
+               // Log.d(TAG, "On passe dans drawLabel avec text = " + text);
+				
+				//Transformation de la valeur dans String text (epoch -> date formatée)
                 //pour une valeur 1601280124 text arrive sous la forme: 1601280124,0. Impossible d'avoir un long directement. Il faut "." et pas "," et
                 //il faut passer par parseDouble puis caster en long
                 long epoch = (long)Double.parseDouble(text.replaceAll(",",".")); 
 				Date date = new Date( epoch * 1000);
-				SimpleDateFormat jdf = new SimpleDateFormat("HH:mm:ss");                
-                text = jdf.format(date);                
-                Log.d(TAG, "date après conversion = " + text);
-                
-                
-                //Exemple AndroidPlot: on colore en rouge
-                //final Paint newPaint = new Paint(paint);
-                //newPaint.setColor(Color.RED);
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");                
+                text = sdf.format(date);                
+
                 super.drawLabel(canvas, text, paint, x, y , isOrigin);
         }
     }
